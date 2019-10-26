@@ -74,9 +74,7 @@ public final class Camera2Controller {
   private final Context context;
   private final int displayRotationCode;
   private final View captureButton;
-  private final View doubleShotButton;
-  private final View zoomButton;
-  private final View zoom1Button;
+  //private final View doubleShotButton;
   private final AutoFitTextureView textureView;
   private OnImageAvailableListener clientOnImageAvailableListener;
 
@@ -121,17 +119,11 @@ public final class Camera2Controller {
       Context context,
       int displayRotationCode,
       Button captureButton,
-      Button zoomButton,
-      Button zoom1Button,
-      View doubleShotButton,
       AutoFitTextureView textureView,
       OnImageAvailableListener clientOnImageAvailableListener) {
     this.context = context;
     this.displayRotationCode = displayRotationCode;
     this.captureButton = captureButton;
-    this.zoomButton = zoomButton;
-    this.zoom1Button = zoom1Button;
-    this.doubleShotButton = doubleShotButton;
     this.textureView = textureView;
     this.clientOnImageAvailableListener = clientOnImageAvailableListener;
   }
@@ -824,9 +816,8 @@ public final class Camera2Controller {
   private void enableCaptureButtons(boolean enable) {
     // Ensure all UI operations happen on the main thread.
     captureButton.post(() -> captureButton.setEnabled(enable));
-    doubleShotButton.post(() -> doubleShotButton.setEnabled(enable));
-    zoomButton.post(() ->zoomButton.setEnabled(enable));
-    zoom1Button.post(() ->zoom1Button.setEnabled(enable));
+    //doubleShotButton.post(() -> doubleShotButton.setEnabled(enable));
+    //여기서 버튼 추가 해줘야 함
   }
 
   public void zooming(int num){

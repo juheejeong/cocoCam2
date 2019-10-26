@@ -6,9 +6,9 @@
     android:background="@color/control_main"
     android:layout_height="150dp">
 
-  <Button
-    android:id="@+id/api_selector"
-    style="@style/text_control"/>
+  <!--<Button-->
+    <!--android:id="@+id/api_selector"-->
+    <!--style="@style/text_control"/>-->
 
   <View
     android:layout_width="0dp"
@@ -17,7 +17,9 @@
 
   <ImageButton
     android:id="@+id/control_camera_selection"
-    style="@style/image_control"/>
+    style="@style/image_control"
+      android:layout_gravity="center"
+      />
 
 
 </LinearLayout>

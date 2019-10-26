@@ -89,23 +89,20 @@ public class CameraApi2Activity extends Activity {
 
 
     Button captureButton = findViewById(R.id.button_capture);
-    Button zoomButton = findViewById(R.id.button_zoom);
-    Button zoom1Button = findViewById(R.id.button1_zoom);
+    //Button zoomButton = findViewById(R.id.button_zoom);
+    //Button zoom1Button = findViewById(R.id.button1_zoom);
 
     captureButton.setOnClickListener(v -> cameraController.takePicture());
     //zoomButton.setOnClickListener(v-> cameraController.zooming(1));
     //zoom1Button.setOnClickListener(v-> cameraController.zooming(2));
-    Button doubleShotButton = findViewById(R.id.doubleshot_button);
-    doubleShotButton.setVisibility(View.VISIBLE);
-    doubleShotButton.setOnClickListener(v -> cameraController.takeDoubleShot());
+    //Button doubleShotButton = findViewById(R.id.doubleshot_button);
+//    doubleShotButton.setVisibility(View.VISIBLE);
+//    doubleShotButton.setOnClickListener(v -> cameraController.takeDoubleShot());
 
     cameraController = new Camera2Controller(
         getApplicationContext(),
         getWindowManager().getDefaultDisplay().getRotation(),
         captureButton,
-        zoomButton,
-        zoom1Button,
-        doubleShotButton,
         textureView,
         onImageAvailableListener);
 
