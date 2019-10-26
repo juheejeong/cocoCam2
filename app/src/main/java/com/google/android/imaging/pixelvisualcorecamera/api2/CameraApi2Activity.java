@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.imaging.pixelvisualcorecamera.R;
 import com.google.android.imaging.pixelvisualcorecamera.common.FileSystem;
@@ -41,6 +42,8 @@ import com.google.android.imaging.pixelvisualcorecamera.common.Preferences;
 import com.google.android.imaging.pixelvisualcorecamera.common.Toasts;
 import com.google.android.imaging.pixelvisualcorecamera.common.Utils;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import travel.ithaka.android.horizontalpickerlib.PickerLayoutManager;
 
@@ -65,6 +68,7 @@ public class CameraApi2Activity extends Activity {
   private ZoomScaleGestureListener zoomScaleGestureListener;
   private boolean resumed;
   private boolean cameraAcquired;
+  PickerAdapter adapter;
 
   private final Camera2Controller.OnImageAvailableListener onImageAvailableListener =
       (image) -> FileSystem.saveImage(getApplicationContext(), image, /*isApi1*/ false);
@@ -82,13 +86,15 @@ public class CameraApi2Activity extends Activity {
     AutoFitTextureView textureView = findViewById(R.id.camera_preview);
     Utils.setSystemUiOptionsForFullscreen(this);
 
+
+
     Button captureButton = findViewById(R.id.button_capture);
     Button zoomButton = findViewById(R.id.button_zoom);
     Button zoom1Button = findViewById(R.id.button1_zoom);
 
     captureButton.setOnClickListener(v -> cameraController.takePicture());
-    zoomButton.setOnClickListener(v-> cameraController.zooming(1));
-    zoom1Button.setOnClickListener(v-> cameraController.zooming(2));
+    //zoomButton.setOnClickListener(v-> cameraController.zooming(1));
+    //zoom1Button.setOnClickListener(v-> cameraController.zooming(2));
     Button doubleShotButton = findViewById(R.id.doubleshot_button);
     doubleShotButton.setVisibility(View.VISIBLE);
     doubleShotButton.setOnClickListener(v -> cameraController.takeDoubleShot());
@@ -111,16 +117,61 @@ public class CameraApi2Activity extends Activity {
     zoomScaleGestureListener.restoreInstanceState(savedInstanceState);
     zoomScaleGestureDetector = new ScaleGestureDetector(this, zoomScaleGestureListener);
 
-//    RecyclerView recyclerView = findViewById(R.id.rv);
-//    PickerLayoutManager pickerLayoutManager = new PickerLayoutManager(this, PickerLayoutManager.HORIZONTAL, false);
-//    pickerLayoutManager.setChangeAlpha(true);
-//    pickerLayoutManager.setScaleDownBy(0.99f);
-//    pickerLayoutManager.setScaleDownDistance(0.8f);
-//    SnapHelper snapHelper = new LinearSnapHelper();
-//    snapHelper.attachToRecyclerView(recyclerView);
-//
-//    recyclerView.setLayoutManager(pickerLayoutManager);
-//
+    RecyclerView rv = findViewById(R.id.rv);
+    PickerLayoutManager pickerLayoutManager = new PickerLayoutManager(this, PickerLayoutManager.HORIZONTAL, false);
+    pickerLayoutManager.setChangeAlpha(true);
+    pickerLayoutManager.setScaleDownBy(0.99f);
+    pickerLayoutManager.setScaleDownDistance(0.8f);
+
+    adapter = new PickerAdapter(this, getData(5), rv);
+    SnapHelper snapHelper = new LinearSnapHelper();
+    snapHelper.attachToRecyclerView(rv);
+    rv.setLayoutManager(pickerLayoutManager);
+    rv.setAdapter(adapter);
+
+    pickerLayoutManager.setOnScrollStopListener(new PickerLayoutManager.onScrollStopListener() {
+      @Override
+      public void selectedView(View view) {
+        Log.d("TAG","WHERWR");
+        //Toast.makeText(CameraApi2Activity.this, ("Selected value : "+((TextView) view).getText().toString()), Toast.LENGTH_SHORT).show();
+        String temp = ((TextView) view).getText().toString();
+        Log.d("TAG", "temp :::::::" + temp );
+        int real = Integer.parseInt(temp);
+
+        switch(real){
+          case 28:
+            cameraController.setZoom(1);
+            //Toast.makeText(CameraApi2Activity.this,"28", Toast.LENGTH_SHORT).show();//Toast.makeText(CameraApi2Activity.this, "28", Toast.LENGTH_SHORT).show();
+                break;
+
+          case 35:
+            cameraController.setZoom(1.25);
+            //Toast.makeText(CameraApi2Activity.this,"35", Toast.LENGTH_SHORT).show();//Toast.makeText(CameraApi2Activity.this, "28", Toast.LENGTH_SHORT).show();
+                break;
+
+            case 50:
+            cameraController.setZoom(2);
+            //Toast.makeText(CameraApi2Activity.this,"50", Toast.LENGTH_SHORT).show();//Toast.makeText(CameraApi2Activity.this, "28", Toast.LENGTH_SHORT).show();
+                break;
+
+            case 85:
+            cameraController.setZoom(3);
+            //Toast.makeText(CameraApi2Activity.this,"85", Toast.LENGTH_SHORT).show();//Toast.makeText(CameraApi2Activity.this, "28", Toast.LENGTH_SHORT).show();
+                break;
+
+            case 120:
+            cameraController.setZoom(4);
+            //Toast.makeText(CameraApi2Activity.this,"120", Toast.LENGTH_SHORT).show();//Toast.makeText(CameraApi2Activity.this, "28", Toast.LENGTH_SHORT).show();
+                break;
+
+            default:
+                break;
+
+        }
+      }
+    });
+    rv.setLayoutManager(pickerLayoutManager);
+
 //    pickerLayoutManager.setOnScrollStopListener(new PickerLayoutManager.onScrollStopListener() {
 //      @Override
 //      public void selectedView(View view) {
@@ -130,7 +181,19 @@ public class CameraApi2Activity extends Activity {
 //    });
   }
 
+  public List<String> getData(int count) {
+    List<String> data = new ArrayList<>();
+//    for (int i = 0; i < count; i++) {
+//      data.add(String.valueOf(i));
+//    }
+    data.add(String.valueOf(28));
+    data.add(String.valueOf(35));
+    data.add(String.valueOf(50));
+    data.add(String.valueOf(85));
+    data.add(String.valueOf(120));
 
+    return data;
+  }
 
   @Override
   public void onWindowFocusChanged(boolean hasFocus) {
@@ -203,14 +266,14 @@ public class CameraApi2Activity extends Activity {
 
   @SuppressLint("SetTextI18n")
   private void initApiSwitch() {
-    Button button = findViewById(R.id.api_selector);
-    button.setText("API 2");
-    button.setOnClickListener(v -> {
-      Log.i(TAG, "switching to API 1");
-      preferences.setModeApi1(true);
-      finish();
-      startActivity(Intents.createApi1Intent());
-    });
+//    Button button = findViewById(R.id.api_selector);
+//    button.setText("API 2");
+//    button.setOnClickListener(v -> {
+//      Log.i(TAG, "switching to API 1");
+//      preferences.setModeApi1(true);
+//      finish();
+//      //startActivity(Intents.createApi1Intent());
+//    });
   }
 
   /** Initializes cameraId state from global preferences. */

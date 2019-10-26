@@ -88,7 +88,7 @@ final class Camera1Controller {
 
     CameraInfo info = new CameraInfo();
     Camera.getCameraInfo(cameraId, info);
-    boolean lensFacingFront = (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT);
+    boolean lensFacingFront = (info.facing == CameraInfo.CAMERA_FACING_FRONT);
 
     int previewOrientationDegrees =
         Orientation.getPreviewOrientation(lensFacingFront, displayRotation, info.orientation);

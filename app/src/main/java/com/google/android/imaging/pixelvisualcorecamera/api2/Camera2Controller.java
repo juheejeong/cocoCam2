@@ -46,6 +46,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.imaging.pixelvisualcorecamera.common.Orientation;
+import com.google.android.imaging.pixelvisualcorecamera.common.Toasts;
 import com.google.android.imaging.pixelvisualcorecamera.common.Utils;
 import java.io.IOException;
 import java.util.Arrays;
@@ -159,6 +160,7 @@ public final class Camera2Controller {
     this.outputSize = outputSize;
     if (textureView.isAvailable()) {
       openCamera(textureView.getWidth(), textureView.getHeight(), outputSize);
+
     } else {
       Log.d(TAG, "textureView not available, starting listener");
       textureView.setSurfaceTextureListener(surfaceTextureListener);
@@ -224,6 +226,7 @@ public final class Camera2Controller {
     this.zoomSetting = zoomSetting;
 
     try {
+      Log.d("TAG", Double.toString(zoomSetting));
       captureSession.stopRepeating();
       //zoomSetting = 2;
       setCropRegion(previewRequestBuilder, zoomSetting);

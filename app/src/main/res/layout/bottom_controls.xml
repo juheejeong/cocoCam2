@@ -17,8 +17,28 @@
       <!--app:layout_constraintRight_toRightOf="parent"-->
       <!--app:layout_constraintTop_toTopOf="parent"-->
       <!--android:clipToPadding="false" />-->
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+      <!--<android.support.v7.widget.RecyclerView-->
+          <!--android:id="@+id/rv"-->
+          <!--android:layout_width="match_parent"-->
+          <!--android:layout_height="wrap_content"-->
+          <!--android:layout_centerHorizontal="true"-->
+          <!--android:layout_centerVertical="true"-->
+          <!--android:clipToPadding="false"-->
+          <!--android:paddingLeft="183dp"-->
+          <!--android:paddingRight="183dp" />-->
 
 
+    </FrameLayout>
+
+  <include
+      layout="@layout/wheel_controls"
+      android:layout_width="match_parent"
+      android:layout_height="200dp"
+      />
 
     <Button
         android:id="@+id/button_capture"
