@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="control_text">#FFFFFF</color>
+  <color name="control_background">#40000000</color>
+  <color name="control_main">#e55559</color>
+</resources>
