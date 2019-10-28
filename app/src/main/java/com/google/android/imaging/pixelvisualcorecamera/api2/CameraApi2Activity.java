@@ -18,6 +18,7 @@ package com.google.android.imaging.pixelvisualcorecamera.api2;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.hardware.Camera.CameraInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,9 +36,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.imaging.pixelvisualcorecamera.R;
 import com.google.android.imaging.pixelvisualcorecamera.common.FileSystem;
-import com.google.android.imaging.pixelvisualcorecamera.common.Intents;
 import com.google.android.imaging.pixelvisualcorecamera.common.Preferences;
 import com.google.android.imaging.pixelvisualcorecamera.common.Toasts;
 import com.google.android.imaging.pixelvisualcorecamera.common.Utils;
@@ -69,6 +70,7 @@ public class CameraApi2Activity extends Activity {
   private boolean resumed;
   private boolean cameraAcquired;
   PickerAdapter adapter;
+  LoadingActivity loadingActivity;
 
   private final Camera2Controller.OnImageAvailableListener onImageAvailableListener =
       (image) -> FileSystem.saveImage(getApplicationContext(), image, /*isApi1*/ false);
@@ -85,14 +87,30 @@ public class CameraApi2Activity extends Activity {
     setContentView(R.layout.camera2);
     AutoFitTextureView textureView = findViewById(R.id.camera_preview);
     Utils.setSystemUiOptionsForFullscreen(this);
-
-
+    loadingActivity = new LoadingActivity(getApplicationContext());
 
     Button captureButton = findViewById(R.id.button_capture);
-    //Button zoomButton = findViewById(R.id.button_zoom);
-    //Button zoom1Button = findViewById(R.id.button1_zoom);
 
-    captureButton.setOnClickListener(v -> cameraController.takePicture());
+    captureButton.setOnClickListener(cameraCaptureOnClickListener);
+//
+//            LoadingActivity loadingActivity = new LoadingActivity(CameraApi2Activity.this);
+//              loadingActivity.show();
+//
+//              //카메라 버튼을 누르면 5초 뒤 스레드를 종료시키고 intent 전환 실행 => result로 이동
+//                new Thread(new Runnable() {
+//                    public void run() {
+//                        // TODO Auto-generated method stub
+//                        try {
+//                            Thread.sleep(5000);
+//                        } catch (Throwable ex) {
+//                            ex.printStackTrace();
+//                        }
+//                        loadingActivity.dismiss();
+//                        Intent intent = new Intent(CameraApi2Activity.this, ResultActivity.class);
+//                        startActivity(intent);
+//                    }
+//                }).start();
+
     //zoomButton.setOnClickListener(v-> cameraController.zooming(1));
     //zoom1Button.setOnClickListener(v-> cameraController.zooming(2));
     //Button doubleShotButton = findViewById(R.id.doubleshot_button);
@@ -168,14 +186,6 @@ public class CameraApi2Activity extends Activity {
       }
     });
     rv.setLayoutManager(pickerLayoutManager);
-
-//    pickerLayoutManager.setOnScrollStopListener(new PickerLayoutManager.onScrollStopListener() {
-//      @Override
-//      public void selectedView(View view) {
-//        //Do your thing
-//        Log.d("TAG","WHELLLLLLLL");
-//      }
-//    });
   }
 
   public List<String> getData(int count) {
@@ -256,7 +266,7 @@ public class CameraApi2Activity extends Activity {
   private void initTopControls() {
     initApiSwitch();
     initCameraSelection();
-    setCameraIconForCurrentCamera();
+   // setCameraIconForCurrentCamera();
     ImageButton cameraSelectionButton = findViewById(R.id.control_camera_selection);
     cameraSelectionButton.setOnClickListener(cameraSelectionOnClickListener);
   }
@@ -285,19 +295,19 @@ public class CameraApi2Activity extends Activity {
     cameraId = String.valueOf(cameraIdInt);
   }
 
-  private void setCameraIconForCurrentCamera() {
-    ImageButton button = findViewById(R.id.control_camera_selection);
-    switch (cameraId) {
-      case CAMERA_FACING_BACK:
-        button.setImageResource(R.drawable.ic_camera_rear_white_24);
-        break;
-      case CAMERA_FACING_FRONT:
-        button.setImageResource(R.drawable.ic_camera_front_white_24);
-        break;
-      default:
-        break;
-    }
-  }
+//  private void setCameraIconForCurrentCamera() {
+//    ImageButton button = findViewById(R.id.control_camera_selection);
+//    switch (cameraId) {
+//      case CAMERA_FACING_BACK:
+//        button.setImageResource(R.drawable.ic_camera_rear_white_24);
+//        break;
+//      case CAMERA_FACING_FRONT:
+//        button.setImageResource(R.drawable.ic_camera_front_white_24);
+//        break;
+//      default:
+//        break;
+//    }
+//  }
 
   /** Handles clicks on the camera selection button. */
   private final OnClickListener cameraSelectionOnClickListener = new OnClickListener() {
@@ -318,11 +328,44 @@ public class CameraApi2Activity extends Activity {
           cameraId = CAMERA_FACING_BACK;
       }
       preferences.setCameraId(Integer.valueOf(cameraId));
-      setCameraIconForCurrentCamera();
+      //setCameraIconForCurrentCamera();
 
       Log.i(TAG, "restarting with new camera");
       zoomScaleGestureListener.reset();
       closeAndOpenCamera();
+    }
+  };
+
+  /**
+   * Capture Button Listener
+   * */
+
+  private final OnClickListener cameraCaptureOnClickListener = new OnClickListener() {
+
+    @Override
+    public void onClick(View view) {
+      Log.i(TAG, "changing cameras, releasing camera");
+      Intent intent = new Intent(CameraApi2Activity.this, ResultActivity.class);
+     startActivity(intent);
+      //cameraController.takePicture();
+
+     // loadingActivity.show();
+
+      //카메라 버튼을 누르면 5초 뒤 스레드를 종료시키고 intent 전환 실행 => result로 이동
+//      new Thread(new Runnable() {
+//        public void run() {
+//          // TODO Auto-generated method stub
+//          try {
+//            Thread.sleep(3000);
+//          } catch (Throwable ex) {
+//            ex.printStackTrace();
+//          }
+//          loadingActivity.dismiss();
+//          Intent intent = new Intent(CameraApi2Activity.this, ResultActivity.class);
+//          startActivity(intent);
+//        }
+//      }).start();
+
     }
   };
 

@@ -19,6 +19,7 @@ package com.google.android.imaging.pixelvisualcorecamera.gateway;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+
 import com.google.android.imaging.pixelvisualcorecamera.common.AppPermissions;
 import com.google.android.imaging.pixelvisualcorecamera.common.Intents;
 import com.google.android.imaging.pixelvisualcorecamera.common.Preferences;
@@ -58,7 +59,10 @@ public final class GatewayActivity extends Activity {
   }
 
   private void startCameraActivity() {
-    finish();
+   finish();
     startActivity(isModeApi1 ? Intents.createApi1Intent() : Intents.createApi2Intent());
+
+//    startActivity(GatewayActivity.class, SplashActivity.class)); //로딩이 끝난 후, ChoiceFunction 이동
+//    GatewayActivity.this.finish();
   }
 }

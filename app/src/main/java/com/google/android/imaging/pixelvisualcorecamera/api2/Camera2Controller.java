@@ -43,6 +43,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.imaging.pixelvisualcorecamera.common.Orientation;
@@ -186,6 +187,7 @@ public final class Camera2Controller {
 
   /** Initiate a still image capture. */
   public void takePicture() {
+
     lockFocus();
   }
 

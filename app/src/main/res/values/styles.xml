@@ -17,7 +17,7 @@
     <item name="android:layout_width">@dimen/shutter_button_size</item>
     <item name="android:layout_height">@dimen/shutter_button_size</item>
     <item name="android:layout_margin">@dimen/shutter_button_margin</item>
-    <item name="android:background">@drawable/shutter_button</item>
+    <item name="android:background">@drawable/shutter_300</item>
     <item name="android:layout_gravity">center</item>
     <item name="android:enabled">false</item>
   </style>
@@ -38,8 +38,19 @@
     <item name="android:minHeight">@dimen/button_min_size</item>
     <item name="android:minWidth">@dimen/button_min_size</item>
     <item name="android:layout_margin">@dimen/control_margin</item>
-    <item name="android:background">@drawable/control_bg</item>
+    <item name="android:background">@drawable/reload_32</item>
   </style>
+
+  <style name="setting_control">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:minHeight">@dimen/button_min_size</item>
+    <item name="android:minWidth">@dimen/button_min_size</item>
+    <item name="android:layout_margin">@dimen/control_margin</item>
+    <item name="android:background">@drawable/more_32</item>
+  </style>
+
+
 
   <!--Used for text-only controls in the main display.-->
   <style name="text_control">
@@ -49,7 +60,6 @@
     <item name="android:minWidth">@dimen/button_min_size</item>
     <item name="android:layout_margin">@dimen/control_margin</item>
     <item name="android:background">@drawable/control_bg</item>
-
     <item name="android:textColor">@color/control_text</item>
     <item name="android:fontFamily">monospace</item>
     <item name="android:textStyle">bold</item>
@@ -60,7 +70,13 @@
     <item name="android:orientation">horizontal</item>
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">@dimen/top_controls_main_dimension</item>
-    <item name="android:background">@color/control_background</item>
+    <item name="android:background">@color/control_text</item>
     <item name="android:gravity">center_vertical</item>
+  </style>
+
+  <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+    <item name="android:windowBackground">@drawable/background_splash</item>
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
   </style>
 </resources>

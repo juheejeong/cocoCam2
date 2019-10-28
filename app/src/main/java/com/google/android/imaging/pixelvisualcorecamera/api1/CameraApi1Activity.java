@@ -32,6 +32,8 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 import com.google.android.imaging.pixelvisualcorecamera.R;
 import com.google.android.imaging.pixelvisualcorecamera.api1.Camera1Controller.CaptureCallback;
+import com.google.android.imaging.pixelvisualcorecamera.api2.CameraApi2Activity;
+import com.google.android.imaging.pixelvisualcorecamera.api2.LoadingActivity;
 import com.google.android.imaging.pixelvisualcorecamera.common.FileSystem;
 import com.google.android.imaging.pixelvisualcorecamera.common.Intents;
 import com.google.android.imaging.pixelvisualcorecamera.common.Preferences;
@@ -69,6 +71,7 @@ public final class CameraApi1Activity extends Activity {
     Utils.setSystemUiOptionsForFullscreen(this);
     Button captureButton = findViewById(R.id.button_capture);
     captureButton.setOnClickListener(v -> cameraController.takePicture(captureCallback));
+
 
     cameraController = new Camera1Controller(captureButton);
 
@@ -173,14 +176,14 @@ public final class CameraApi1Activity extends Activity {
 
   @SuppressLint("SetTextI18n")
   private void initApiSwitch() {
-    Button button = findViewById(R.id.api_selector);
-    button.setText("API 1");
-    button.setOnClickListener(v -> {
-      Log.i(TAG, "switching to API 2");
-      preferences.setModeApi1(false);
-      finish();
-      startActivity(Intents.createApi2Intent());
-    });
+//    Button button = findViewById(R.id.api_selector);
+//    button.setText("API 1");
+//    button.setOnClickListener(v -> {
+//      Log.i(TAG, "switching to API 2");
+//      preferences.setModeApi1(false);
+//      finish();
+//      startActivity(Intents.createApi2Intent());
+//    });
   }
 
   /** Initializes cameraId state from global preferences. */
