@@ -60,7 +60,8 @@ public final class GatewayActivity extends Activity {
 
   private void startCameraActivity() {
    finish();
-    startActivity(isModeApi1 ? Intents.createApi1Intent() : Intents.createApi2Intent());
+    //startActivity(isModeApi1 ? Intents.createApi1Intent() : Intents.createApi2Intent());
+    startActivity(Intents.createApi2Intent());
 
 //    startActivity(GatewayActivity.class, SplashActivity.class)); //로딩이 끝난 후, ChoiceFunction 이동
 //    GatewayActivity.this.finish();

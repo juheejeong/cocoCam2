@@ -88,12 +88,14 @@ public final class AutoFitTextureView extends TextureView {
    * @param viewHeight The height of `mTextureView`
    */
   void configureTransform(
-      int displayRotation, int viewWidth, int viewHeight, Size previewSize) {
+          int displayRotation, int viewWidth, int viewHeight, Size previewSize) {
     Matrix matrix = new Matrix();
     RectF viewRect = new RectF(0, 0, viewWidth, viewHeight);
     RectF bufferRect = new RectF(0, 0, previewSize.getHeight(), previewSize.getWidth());
+
     float centerX = viewRect.centerX();
     float centerY = viewRect.centerY();
+
     if (Surface.ROTATION_90 == displayRotation || Surface.ROTATION_270 == displayRotation) {
       bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
       matrix.setRectToRect(viewRect, bufferRect, ScaleToFit.FILL);

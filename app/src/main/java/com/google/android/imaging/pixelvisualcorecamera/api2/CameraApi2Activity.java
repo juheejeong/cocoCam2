@@ -34,6 +34,8 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -61,6 +63,8 @@ public class CameraApi2Activity extends Activity {
   private static final String CAMERA_FACING_BACK = "0";
   private static final String CAMERA_FACING_FRONT = "1";
   private static final String STATE_ZOOM = "zoom";
+  private static int REQUEST_CODE = 1;
+
 
   private String cameraId;
   private HandlerThread backgroundThread;
@@ -91,6 +95,8 @@ public class CameraApi2Activity extends Activity {
     AutoFitTextureView textureView = findViewById(R.id.camera_preview);
     Utils.setSystemUiOptionsForFullscreen(this);
 
+    ImageButton galleryButton = findViewById(R.id.galleryButton);
+    galleryButton.setOnClickListener(galleryOnClickListener);
 
     Button captureButton = findViewById(R.id.button_capture);
 
@@ -98,6 +104,15 @@ public class CameraApi2Activity extends Activity {
     //Button doubleShotButton = findViewById(R.id.doubleshot_button);
     //doubleShotButton.setVisibility(View.VISIBLE);
     //doubleShotButton.setOnClickListener(v -> cameraController.takeDoubleShot());
+
+    //ImageButton galleryButton = (ImageButton) findViewById(R.id.galleryButton);
+    //galleryButton.setOnClickListener(v ->
+
+//        Intent intent = new Intent(Intent.ACTION_PICK);
+//        intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
+//        startActivityForResult(intent, 1);
+
+   // );
 
     cameraController = new Camera2Controller(
         getApplicationContext(),
@@ -133,10 +148,12 @@ public class CameraApi2Activity extends Activity {
     pickerLayoutManager.setOnScrollStopListener(new PickerLayoutManager.onScrollStopListener() {
       @Override
       public void selectedView(View view) {
-        Log.d("TAG","WHERWR");
+
         String temp = ((TextView) view).getText().toString();
-        Log.d("TAG", "temp :::::::" + temp );
         int real = Integer.parseInt(temp);
+
+        Animation startAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.blink_animation);
+
 
         switch(real){
           case 28:
@@ -144,7 +161,11 @@ public class CameraApi2Activity extends Activity {
                 break;
 
           case 35:
+
+            textureView.startAnimation(startAnimation);
+            textureView.clearAnimation();
             cameraController.setZoom(1.25);
+
                 break;
 
             case 50:
@@ -247,6 +268,9 @@ public class CameraApi2Activity extends Activity {
    // setCameraIconForCurrentCamera();
     ImageButton cameraSelectionButton = findViewById(R.id.control_camera_selection);
     cameraSelectionButton.setOnClickListener(cameraSelectionOnClickListener);
+    ImageButton galleryButton = findViewById(R.id.galleryButton);
+    galleryButton.setOnClickListener(galleryOnClickListener);
+
   }
 
   @SuppressLint("SetTextI18n")
@@ -335,6 +359,25 @@ public class CameraApi2Activity extends Activity {
        *
        */
 
+
+
+
+    }
+  };
+
+
+  private final OnClickListener galleryOnClickListener = new OnClickListener() {
+
+    @Override
+    public void onClick(View view) {
+      Log.i(TAG, "changing cameras, releasing camera");
+      // Swap camera ids.
+      Log.d(TAG, "GALLERYYYYYYYYYYYYYYYY");
+
+      Intent intent = new Intent();
+      intent.setType("image*//*");
+      intent.setAction(Intent.ACTION_PICK);
+      startActivityForResult(Intent.createChooser(intent, "Select Image"), REQUEST_CODE);
 
 
 

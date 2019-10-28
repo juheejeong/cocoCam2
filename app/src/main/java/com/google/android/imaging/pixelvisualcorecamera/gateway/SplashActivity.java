@@ -14,9 +14,7 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_splash);
-
         Handler hd = new Handler();
         hd.postDelayed(new splashhandler(), 3000); // 1초 후에 hd handler 실행  3000ms = 3초
 
@@ -25,8 +23,8 @@ public class SplashActivity extends Activity {
     private class splashhandler implements Runnable{
         public void run(){
             Log.d("TAG","SPLASH");
-            startActivity(new Intent(getApplication(), GatewayActivity.class)); //로딩이 끝난 후, ChoiceFunction 이동
-            SplashActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
+            startActivity(new Intent(getApplication(), GatewayActivity.class));
+            SplashActivity.this.finish();
         }
     }
 
