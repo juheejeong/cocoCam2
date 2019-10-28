@@ -7,8 +7,8 @@
     <ImageView
         android:id="@+id/img_android"
         android:layout_width="115dp"
-        android:layout_height="133dp"
-        android:src="@drawable/app_icon2"
+        android:layout_height="115dp"
+        android:src="@drawable/thick_logo_pk"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

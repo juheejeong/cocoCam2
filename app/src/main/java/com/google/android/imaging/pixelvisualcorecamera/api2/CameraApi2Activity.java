@@ -18,6 +18,8 @@ package com.google.android.imaging.pixelvisualcorecamera.api2;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.hardware.Camera.CameraInfo;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,7 +73,7 @@ public class CameraApi2Activity extends Activity {
   private boolean resumed;
   private boolean cameraAcquired;
   PickerAdapter adapter;
-  LoadingActivity loadingActivity;
+
 
   private final Camera2Controller.OnImageAvailableListener onImageAvailableListener =
       (image) -> FileSystem.saveImage(getApplicationContext(), image, /*isApi1*/ false);
@@ -87,35 +90,14 @@ public class CameraApi2Activity extends Activity {
     setContentView(R.layout.camera2);
     AutoFitTextureView textureView = findViewById(R.id.camera_preview);
     Utils.setSystemUiOptionsForFullscreen(this);
-    loadingActivity = new LoadingActivity(getApplicationContext());
+
 
     Button captureButton = findViewById(R.id.button_capture);
 
     captureButton.setOnClickListener(cameraCaptureOnClickListener);
-//
-//            LoadingActivity loadingActivity = new LoadingActivity(CameraApi2Activity.this);
-//              loadingActivity.show();
-//
-//              //카메라 버튼을 누르면 5초 뒤 스레드를 종료시키고 intent 전환 실행 => result로 이동
-//                new Thread(new Runnable() {
-//                    public void run() {
-//                        // TODO Auto-generated method stub
-//                        try {
-//                            Thread.sleep(5000);
-//                        } catch (Throwable ex) {
-//                            ex.printStackTrace();
-//                        }
-//                        loadingActivity.dismiss();
-//                        Intent intent = new Intent(CameraApi2Activity.this, ResultActivity.class);
-//                        startActivity(intent);
-//                    }
-//                }).start();
-
-    //zoomButton.setOnClickListener(v-> cameraController.zooming(1));
-    //zoom1Button.setOnClickListener(v-> cameraController.zooming(2));
     //Button doubleShotButton = findViewById(R.id.doubleshot_button);
-//    doubleShotButton.setVisibility(View.VISIBLE);
-//    doubleShotButton.setOnClickListener(v -> cameraController.takeDoubleShot());
+    //doubleShotButton.setVisibility(View.VISIBLE);
+    //doubleShotButton.setOnClickListener(v -> cameraController.takeDoubleShot());
 
     cameraController = new Camera2Controller(
         getApplicationContext(),
@@ -132,6 +114,10 @@ public class CameraApi2Activity extends Activity {
     zoomScaleGestureListener.restoreInstanceState(savedInstanceState);
     zoomScaleGestureDetector = new ScaleGestureDetector(this, zoomScaleGestureListener);
 
+
+    /**
+     * Zoom Contorl Part
+     */
     RecyclerView rv = findViewById(R.id.rv);
     PickerLayoutManager pickerLayoutManager = new PickerLayoutManager(this, PickerLayoutManager.HORIZONTAL, false);
     pickerLayoutManager.setChangeAlpha(true);
@@ -148,7 +134,6 @@ public class CameraApi2Activity extends Activity {
       @Override
       public void selectedView(View view) {
         Log.d("TAG","WHERWR");
-        //Toast.makeText(CameraApi2Activity.this, ("Selected value : "+((TextView) view).getText().toString()), Toast.LENGTH_SHORT).show();
         String temp = ((TextView) view).getText().toString();
         Log.d("TAG", "temp :::::::" + temp );
         int real = Integer.parseInt(temp);
@@ -156,27 +141,22 @@ public class CameraApi2Activity extends Activity {
         switch(real){
           case 28:
             cameraController.setZoom(1);
-            //Toast.makeText(CameraApi2Activity.this,"28", Toast.LENGTH_SHORT).show();//Toast.makeText(CameraApi2Activity.this, "28", Toast.LENGTH_SHORT).show();
                 break;
 
           case 35:
             cameraController.setZoom(1.25);
-            //Toast.makeText(CameraApi2Activity.this,"35", Toast.LENGTH_SHORT).show();//Toast.makeText(CameraApi2Activity.this, "28", Toast.LENGTH_SHORT).show();
                 break;
 
             case 50:
             cameraController.setZoom(2);
-            //Toast.makeText(CameraApi2Activity.this,"50", Toast.LENGTH_SHORT).show();//Toast.makeText(CameraApi2Activity.this, "28", Toast.LENGTH_SHORT).show();
                 break;
 
             case 85:
             cameraController.setZoom(3);
-            //Toast.makeText(CameraApi2Activity.this,"85", Toast.LENGTH_SHORT).show();//Toast.makeText(CameraApi2Activity.this, "28", Toast.LENGTH_SHORT).show();
                 break;
 
             case 120:
             cameraController.setZoom(4);
-            //Toast.makeText(CameraApi2Activity.this,"120", Toast.LENGTH_SHORT).show();//Toast.makeText(CameraApi2Activity.this, "28", Toast.LENGTH_SHORT).show();
                 break;
 
             default:
@@ -188,11 +168,9 @@ public class CameraApi2Activity extends Activity {
     rv.setLayoutManager(pickerLayoutManager);
   }
 
+  //Add zoom levels
   public List<String> getData(int count) {
     List<String> data = new ArrayList<>();
-//    for (int i = 0; i < count; i++) {
-//      data.add(String.valueOf(i));
-//    }
     data.add(String.valueOf(28));
     data.add(String.valueOf(35));
     data.add(String.valueOf(50));
@@ -295,20 +273,6 @@ public class CameraApi2Activity extends Activity {
     cameraId = String.valueOf(cameraIdInt);
   }
 
-//  private void setCameraIconForCurrentCamera() {
-//    ImageButton button = findViewById(R.id.control_camera_selection);
-//    switch (cameraId) {
-//      case CAMERA_FACING_BACK:
-//        button.setImageResource(R.drawable.ic_camera_rear_white_24);
-//        break;
-//      case CAMERA_FACING_FRONT:
-//        button.setImageResource(R.drawable.ic_camera_front_white_24);
-//        break;
-//      default:
-//        break;
-//    }
-//  }
-
   /** Handles clicks on the camera selection button. */
   private final OnClickListener cameraSelectionOnClickListener = new OnClickListener() {
 
@@ -337,7 +301,7 @@ public class CameraApi2Activity extends Activity {
   };
 
   /**
-   * Capture Button Listener
+   * Capture Button Listener ******* Server Communication *********
    * */
 
   private final OnClickListener cameraCaptureOnClickListener = new OnClickListener() {
@@ -345,26 +309,34 @@ public class CameraApi2Activity extends Activity {
     @Override
     public void onClick(View view) {
       Log.i(TAG, "changing cameras, releasing camera");
-      Intent intent = new Intent(CameraApi2Activity.this, ResultActivity.class);
-     startActivity(intent);
-      //cameraController.takePicture();
 
-     // loadingActivity.show();
+      cameraController.takePicture(); //Take Picture Method
+      LoadingActivity loadingActivity = new LoadingActivity(CameraApi2Activity.this);
+      loadingActivity.show(); //Invoke Loading Animation
 
-      //카메라 버튼을 누르면 5초 뒤 스레드를 종료시키고 intent 전환 실행 => result로 이동
-//      new Thread(new Runnable() {
-//        public void run() {
-//          // TODO Auto-generated method stub
-//          try {
-//            Thread.sleep(3000);
-//          } catch (Throwable ex) {
-//            ex.printStackTrace();
-//          }
-//          loadingActivity.dismiss();
-//          Intent intent = new Intent(CameraApi2Activity.this, ResultActivity.class);
-//          startActivity(intent);
-//        }
-//      }).start();
+      // after 3 seconds Loading Activity to Result Activity
+      new Thread(new Runnable() {
+        public void run() {
+          // TODO Auto-generated method stub
+          try {
+            Thread.sleep(3000);
+          } catch (Throwable ex) {
+            ex.printStackTrace();
+          }
+          loadingActivity.dismiss();
+          Intent intent = new Intent(CameraApi2Activity.this, ResultActivity.class);
+          startActivity(intent);
+        }
+      }).start();
+
+
+      /**
+       *  Server Communication
+       *
+       */
+
+
+
 
     }
   };
@@ -413,5 +385,21 @@ public class CameraApi2Activity extends Activity {
       Log.w(TAG, "Interrupted while shutting background thread down", e);
     }
   }
+
+// unnecessary
+//  private void setCameraIconForCurrentCamera() {
+//    ImageButton button = findViewById(R.id.control_camera_selection);
+//    switch (cameraId) {
+//      case CAMERA_FACING_BACK:
+//        button.setImageResource(R.drawable.ic_camera_rear_white_24);
+//        break;
+//      case CAMERA_FACING_FRONT:
+//        button.setImageResource(R.drawable.ic_camera_front_white_24);
+//        break;
+//      default:
+//        break;
+//    }
+//  }
+
 
 }
