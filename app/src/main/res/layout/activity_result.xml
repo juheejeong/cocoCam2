@@ -59,11 +59,7 @@
         <ImageView
             android:id="@+id/resultImageView"
             android:layout_width="match_parent"
-<<<<<<< HEAD
-            android:layout_height="wrap_content" />
-=======
             android:layout_height="match_parent" />
->>>>>>> dev_juhee
     </FrameLayout>
 
 
