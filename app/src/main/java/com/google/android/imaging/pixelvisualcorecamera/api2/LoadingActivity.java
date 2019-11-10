@@ -31,6 +31,7 @@ public class LoadingActivity extends ProgressDialog {
         setCanceledOnTouchOutside(false);
 
         c=context;
+
     }
 
     @Override

@@ -43,6 +43,7 @@ public final class ZoomScaleGestureListener extends SimpleOnScaleGestureListener
 
   /**
    * @param label the TextView to update as the zoom changes
+   * @param label the TextView to update as the zoom changes
    * @param stateKey the bundle key with which to store/retrieve the state
    */
   ZoomScaleGestureListener(

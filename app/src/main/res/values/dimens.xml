@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Using dp for text, not sp, for fixed size. -->
 <resources>
-  <dimen name="shutter_button_size">64dp</dimen>
+  <dimen name="shutter_button_size">100dp</dimen>
   <dimen name="shutter_button_margin">8dp</dimen>
   <dimen name="text_control_text_size">14dp</dimen>
   <dimen name="control_margin">8dp</dimen>

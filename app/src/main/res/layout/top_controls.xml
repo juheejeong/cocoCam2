@@ -1,50 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  style="@style/top_controls_horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/top_controls_horizontal"
     android:layout_alignParentTop="true"
     android:background="@color/control_main"
-    android:layout_height="150dp"
-    android:layout_weight="3">
+    android:layout_height="70dp">
 
-  <!--<View-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="0dp"-->
-    <!--android:layout_weight="1"/>-->
-  <ImageButton
-      android:id="@+id/settingButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignTop="@+id/top"
-      android:layout_gravity="center"
-      android:layout_weight="1"
-      android:background="@android:color/transparent"
-      android:src="@drawable/more_32" />
+  <!--<Button-->
+  <!--android:id="@+id/api_selector"-->
+  <!--style="@style/text_control"/>-->
 
-    <!--<ImageButton-->
-        <!--android:id="@+id/control_camera_selection"-->
-        <!--style="@style/image_control"-->
-        <!--android:layout_gravity="center"-->
-        <!--/>-->
+  <!--  <View
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:layout_weight="1"/>-->
+  <LinearLayout
+      android:id="@+id/top"
+      android:layout_width="match_parent"
+      android:layout_height="70dp"
+      android:layout_gravity="top"
+      android:layout_alignParentTop="true"
+      android:layout_weight="3"
+      android:background="@color/control_pink"
+      android:orientation="horizontal">
 
-  <ImageButton
-      android:id="@+id/control_camera_selection"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignTop="@+id/top"
-      android:layout_gravity="center"
-      android:layout_weight="1"
-      android:background="@android:color/transparent"
-      android:src="@drawable/reload_32" />
+    <ImageButton
+        android:id="@+id/settingBtn"
+        android:src="@drawable/setting_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@android:color/transparent"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="1"
+        android:enabled="false" />
 
-  <ImageButton
-      android:id="@+id/galleryButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignTop="@+id/top"
-      android:layout_gravity="center"
-      android:layout_weight="1"
-      android:background="@android:color/transparent"
-      android:src="@drawable/gallery_32" />
+    <ImageButton
+        android:id="@+id/control_camera_selection"
+        android:src="@drawable/refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:background="@android:color/transparent"
+        android:layout_weight="1" />
+
+    <!--  <Button
+android:id="@+id/changeBtn"
+style="@style/change_fb"
+android:layout_width="50dp"
+android:layout_height="52dp"
+android:layout_gravity="center_vertical"
+android:enabled="false" />-->
+
+    <ImageButton
+        android:id="@+id/galleryButton"
+        android:src="@drawable/gallery"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center_vertical"
+        android:background="@android:color/transparent"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="1"
+        android:enabled="false" />
+  </LinearLayout>
 
 </LinearLayout>

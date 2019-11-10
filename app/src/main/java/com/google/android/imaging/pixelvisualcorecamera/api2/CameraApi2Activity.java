@@ -131,7 +131,7 @@ public class CameraApi2Activity extends Activity {
 
 
     /**
-     * Zoom Contorl Part
+     * Zoom Control Part
      */
     RecyclerView rv = findViewById(R.id.rv);
     PickerLayoutManager pickerLayoutManager = new PickerLayoutManager(this, PickerLayoutManager.HORIZONTAL, false);
@@ -161,11 +161,9 @@ public class CameraApi2Activity extends Activity {
                 break;
 
           case 35:
-
             textureView.startAnimation(startAnimation);
-            textureView.clearAnimation();
+            textureView.clearAnimation();//깜빡이는 애니메이션 시도중(미완)
             cameraController.setZoom(1.25);
-
                 break;
 
             case 50:
@@ -338,7 +336,7 @@ public class CameraApi2Activity extends Activity {
       LoadingActivity loadingActivity = new LoadingActivity(CameraApi2Activity.this);
       loadingActivity.show(); //Invoke Loading Animation
 
-      // after 3 seconds Loading Activity to Result Activity
+      // after 3 seconds from Loading Activity to Result Activity
       new Thread(new Runnable() {
         public void run() {
           // TODO Auto-generated method stub
@@ -348,22 +346,32 @@ public class CameraApi2Activity extends Activity {
             ex.printStackTrace();
           }
           loadingActivity.dismiss();
+
+
           Intent intent = new Intent(CameraApi2Activity.this, ResultActivity.class);
           startActivity(intent);
+
+
+
         }
       }).start();
 
-
+      //sendToServer();
       /**
        *  Server Communication
        *
        */
 
 
-
-
     }
   };
+
+//  private void sendToServer(){
+//    Intent intent = new Intent();
+//    intent.setType("image/*");
+//    intent.setAction(Intent.ACTION_GET_CONTENT);
+//    startActivityForResult(intent, 1);
+//  }
 
 
   private final OnClickListener galleryOnClickListener = new OnClickListener() {
@@ -375,9 +383,9 @@ public class CameraApi2Activity extends Activity {
       Log.d(TAG, "GALLERYYYYYYYYYYYYYYYY");
 
       Intent intent = new Intent();
-      intent.setType("image*//*");
-      intent.setAction(Intent.ACTION_PICK);
-      startActivityForResult(Intent.createChooser(intent, "Select Image"), REQUEST_CODE);
+      intent.setType("image/*");
+      intent.setAction(Intent.ACTION_GET_CONTENT);
+      startActivityForResult(intent, REQUEST_CODE);
 
 
 

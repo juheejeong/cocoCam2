@@ -17,7 +17,7 @@
     <item name="android:layout_width">@dimen/shutter_button_size</item>
     <item name="android:layout_height">@dimen/shutter_button_size</item>
     <item name="android:layout_margin">@dimen/shutter_button_margin</item>
-    <item name="android:background">@drawable/shutter_300</item>
+    <item name="android:background">@drawable/shutter_icon</item>
     <item name="android:layout_gravity">center</item>
     <item name="android:enabled">false</item>
   </style>
@@ -70,7 +70,7 @@
     <item name="android:orientation">horizontal</item>
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">@dimen/top_controls_main_dimension</item>
-    <item name="android:background">@color/control_text</item>
+    <item name="android:background">@color/control_main</item>
     <item name="android:gravity">center_vertical</item>
   </style>
 
