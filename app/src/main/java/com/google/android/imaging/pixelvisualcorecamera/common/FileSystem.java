@@ -24,11 +24,27 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
+
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.Date;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Utilities for working with the file system.
@@ -36,7 +52,7 @@ import java.util.Date;
 public final class FileSystem {
 
   private static final String TAG = "PvcCamFiles";
-  private static final String PICTURES_DIR_NAME = "PixelVisualCoreCamera";
+  private static final String PICTURES_DIR_NAME = "cocoCam";
 
   /** The result returned by #saveImage. */
   public static class SaveImageResult {
@@ -89,7 +105,7 @@ public final class FileSystem {
     }
   }
 
-  private static File getStorageDir() {
+  private static File getStorageDir() {//PICTURES_DIR_NAME
     File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
         Environment.DIRECTORY_PICTURES), PICTURES_DIR_NAME);
 
@@ -121,17 +137,18 @@ public final class FileSystem {
     return saveBytesToDiskAndReturnResult(context, buffer, isApi1);
   }
 
-  private static SaveImageResult saveBytesToDiskAndReturnResult(
+  public static SaveImageResult saveBytesToDiskAndReturnResult(
       Context context, ByteBuffer byteBuffer, boolean isApi1) {
     File outputFile = saveBytesToDisk(context, byteBuffer, isApi1);
     if (outputFile != null) {
       updateMediaStore(context, outputFile);
+
       return new SaveImageResult(/*success*/ true);
     }
     return new SaveImageResult(/*success*/ false);
   }
 
-  private static File saveBytesToDisk(Context context, ByteBuffer byteBuffer, boolean isApi1) {
+  public static File saveBytesToDisk(Context context, ByteBuffer byteBuffer, boolean isApi1) {
     byte[] bytes = new byte[byteBuffer.remaining()];
     byteBuffer.get(bytes);
     FileOutputStream output = null;
@@ -147,8 +164,12 @@ public final class FileSystem {
       if (outputFile != null) {
         output = new FileOutputStream(outputFile);
         output.write(bytes);
+
+
+          goSend(outputFile);
+
         Log.i(TAG,  "Wrote " + outputFile.getName());
-        Toasts.showToast(context, "Wrote " + outputFile.getName(), Toast.LENGTH_SHORT);
+        //Toasts.showToast(context, "Wrote " + outputFile.getName(), Toast.LENGTH_SHORT);
       }
     } catch (IOException e) {
       outputFile = null;
@@ -176,5 +197,45 @@ public final class FileSystem {
     context.sendBroadcast(intent);
   }
 
-  private FileSystem() {}
+
+
+  // from Android to server
+  public static void goSend(File output) throws IOException{
+
+  OkHttpClient client = new OkHttpClient();
+
+    RequestBody requestBody = new MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("file", "original_photo.jpg", RequestBody.create(MultipartBody.FORM, output))
+            .build();
+
+    Request request = new Request.Builder()
+            .url("http://52.79.240.201/phps/upload.php")
+            .post(requestBody)
+            .build();
+
+    Response response = client.newCall(request).execute();
+    Log.d("response1", "uploadImage:" + response.body().string());
+
+    client.newCall(request).enqueue(new Callback() {
+      @Override
+      public void onFailure(@NotNull Call call, @NotNull IOException e) {
+        e.printStackTrace();
+        Log.d("TAG", "SURE ??");
+      }
+
+      @Override
+      public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+        Log.d("TEST2: ", response.body().string());
+      }
+    });
+  }
+
+  public static void getImage() {
+
+
+  }
+
 }
+
+

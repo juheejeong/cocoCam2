@@ -18,6 +18,7 @@ package com.google.android.imaging.pixelvisualcorecamera.api2;
 
 import static android.hardware.camera2.CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM;
 import static android.hardware.camera2.CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE;
+import static junit.framework.Assert.assertTrue;
 
 import android.content.Context;
 import android.graphics.ImageFormat;
@@ -32,14 +33,17 @@ import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
+import android.hardware.camera2.params.MeteringRectangle;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.media.MediaActionSound;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
+import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
@@ -92,6 +96,7 @@ public final class Camera2Controller {
   private boolean nonHdrPlusShotPending;
   private Size outputSize;
   private int outputOrientation;
+
 
 
   /**
@@ -187,8 +192,11 @@ public final class Camera2Controller {
 
   /** Initiate a still image capture. */
   public void takePicture() {
-
+    MediaActionSound
+            mediaActionSound = new MediaActionSound();
+    mediaActionSound.play(MediaActionSound.SHUTTER_CLICK);
     lockFocus();
+
   }
 
   /** Initiate capture of back to back HDR+ and non-HDR shots. */
@@ -366,8 +374,8 @@ public final class Camera2Controller {
   /**
    * Configures the output surfaces.
    *
-   * @param width  The width of available size for camera preview
-   * @param height The height of available size for camera preview
+   * @param width  The width of available size for camera
+   * @param height The height of available size for camera previewpreview
    */
   private void setUpCameraOutputs(int width, int height, Size outputSize) {
     Log.d(TAG, String.format("setUpCameraOutputs(w=%d, h=%d)", width, height));
@@ -375,6 +383,7 @@ public final class Camera2Controller {
     configureImageReader(outputSize);
 
     // We know which preview sizes Pixel 2 supports; just use those directly.
+    //previewSize = new Size(Utils.MAX_PREVIEW_WIDTH, Utils.MAX_PREVIEW_WIDTH);
     previewSize = new Size(Utils.MAX_PREVIEW_WIDTH, Utils.MAX_PREVIEW_HEIGHT);
     Log.d(TAG, String.format("preview size (%d, %d)",
         previewSize.getWidth(), previewSize.getHeight()));
@@ -489,6 +498,10 @@ public final class Camera2Controller {
         CaptureRequest.CONTROL_AE_MODE,
         CaptureRequest.CONTROL_AE_MODE_ON);
 
+    builder.set(
+        CaptureRequest.CONTROL_AE_MODE,
+        CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+
     // HDR+: Flash mode must be off.
     builder.set(
         CaptureRequest.FLASH_MODE,
@@ -506,6 +519,11 @@ public final class Camera2Controller {
     builder.set(
         CaptureRequest.STATISTICS_LENS_SHADING_MAP_MODE,
         CaptureRequest.STATISTICS_LENS_SHADING_MAP_MODE_ON);
+
+    MeteringRectangle meteringRectangle = new MeteringRectangle(new Rect(50, 50, 50, 50), MeteringRectangle.METERING_WEIGHT_MAX);
+    builder.set(
+            CaptureRequest.CONTROL_AF_REGIONS, new MeteringRectangle[] { meteringRectangle });
+
 
     setCropRegion(builder, zoomSetting);
   }
@@ -543,6 +561,18 @@ public final class Camera2Controller {
     builder.set(
         CaptureRequest.CONTROL_AF_TRIGGER,
         CameraMetadata.CONTROL_AF_TRIGGER_START);
+  }
+
+  public static MeteringRectangle[] getExpectedOutputRegion(MeteringRectangle[] requestRegions, Rect cropRect) {
+    MeteringRectangle[] resultRegions = new MeteringRectangle[requestRegions.length];
+    for (int i = 0; i < requestRegions.length; i++) {
+      Rect requestRect = requestRegions[i].getRect();
+      Rect resultRect = new Rect();
+      assertTrue
+              ("Input 3A region must intersect cropped region", resultRect.setIntersect(requestRect, cropRect));
+      resultRegions[i] = new MeteringRectangle(resultRect, requestRegions[i].getMeteringWeight());
+    }
+    return resultRegions;
   }
 
   private void setCaptureSessionOrientation(CaptureRequest.Builder builder) {
