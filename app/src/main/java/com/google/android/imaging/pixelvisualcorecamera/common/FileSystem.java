@@ -204,8 +204,11 @@ public final class FileSystem {
 
   OkHttpClient client = new OkHttpClient();
 
+<<<<<<< HEAD
     //Log.d("YOLO", output.getName());
     //String imagePath = output.getAbsolutePath();
+=======
+>>>>>>> dev_juhee
     RequestBody requestBody = new MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             .addFormDataPart("file", "original_photo.jpg", RequestBody.create(MultipartBody.FORM, output))

@@ -3,10 +3,18 @@ package com.google.android.imaging.pixelvisualcorecamera.api2;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+<<<<<<< HEAD
+=======
+import android.os.AsyncTask;
+>>>>>>> dev_juhee
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+<<<<<<< HEAD
+=======
+import android.webkit.DownloadListener;
+>>>>>>> dev_juhee
 import android.widget.ImageView;
 
 import com.google.android.imaging.pixelvisualcorecamera.R;
@@ -27,12 +35,17 @@ import okhttp3.Response;
 public class ResultActivity extends AppCompatActivity {
 
     private final OkHttpClient client = new OkHttpClient();
+<<<<<<< HEAD
 ImageView imageView;
+=======
+    ImageView imageView;
+>>>>>>> dev_juhee
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+<<<<<<< HEAD
         ImageView imageView = findViewById(R.id.resultImageView);
 
 
@@ -43,6 +56,14 @@ ImageView imageView;
         catch (Exception e){
 
         }
+=======
+        imageView = (ImageView) findViewById(R.id.resultImageView);
+
+        String downloadUrl = "http://52.79.240.201/phps/original_photo.jpg";
+
+        new DownloadImageTask(imageView)
+                .execute(downloadUrl);
+>>>>>>> dev_juhee
     }
 
     public void onClick(View view){
@@ -50,6 +71,7 @@ ImageView imageView;
         startActivity(intent);
     }
 
+<<<<<<< HEAD
 
 //    public void run() throws Exception {
 //        Request request = new Request.Builder()
@@ -106,4 +128,46 @@ ImageView imageView;
 
 
 
+=======
+    //from server to Android
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+
+            final OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+                    .url(urls[0])
+                    .build();
+
+            Response response = null;
+            Bitmap mIcon11 = null;
+            try {
+                response = client.newCall(request).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (response.isSuccessful()) {
+                try {
+                    mIcon11 = BitmapFactory.decodeStream(response.body().byteStream());
+                } catch (Exception e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                }
+
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
+
+>>>>>>> dev_juhee
 }

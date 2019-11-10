@@ -341,7 +341,7 @@ public class CameraApi2Activity extends Activity {
         public void run() {
           // TODO Auto-generated method stub
           try {
-            Thread.sleep(3000);
+            Thread.sleep(5000);
           } catch (Throwable ex) {
             ex.printStackTrace();
           }
